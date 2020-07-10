@@ -1,0 +1,9 @@
+<div class="kanban_stage">
+  <div>{{ stage.name }}</div>
+  <div>
+    <span *ngFor="let card of stage.cards">
+      <app-kanban-card [card]="card" (onCardSelected)="onCardSelected($event)">
+      </app-kanban-card>
+    </span>
+  </div>
+</div>

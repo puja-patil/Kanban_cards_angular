@@ -1,0 +1,43 @@
+<div class="kanban_view">
+  <div class="kanban_controls m-2" style="height: 12em;">
+    <div *ngIf="selectedCard.length == 0" role="alert">
+      Card not Selected
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <input type="text" [(ngModel)]="addValue" (keyup.enter)="onAddCard()" />
+      </div>
+      <div class="col-2">
+        <button type="submit" (click)="onAddCard()">Add</button>
+      </div>
+    </div>
+    <div style="height: 1em;"></div>
+
+    <div class="row">
+      <div class="col-2">
+        <input type="text" value="{{ selectedCard }}" readonly />
+      </div>
+      <div class="col-2">
+        <button type="submit" (click)="onMoveBackCard()">Move Back</button>
+      </div>
+      <div class="col-2">
+        <button type="submit" (click)="onMoveForwardCard()">
+          Move Forward
+        </button>
+      </div>
+      <div class="col-2">
+        <button type="submit" (click)="onDeleteCard()">Delete</button>
+      </div>
+    </div>
+  </div>
+  <div class="kanban_stage_container">
+    <div class="row">
+      <div class="col" *ngFor="let stage of stages">
+        <app-kanban-stage
+          [stage]="stage"
+          (onCardselect)="onCardselect($event)"
+        ></app-kanban-stage>
+      </div>
+    </div>
+  </div>
+</div>
