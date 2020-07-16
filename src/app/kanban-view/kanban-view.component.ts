@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { error } from 'util';
-
 @Component({
   selector: 'app-kanban-view',
   templateUrl: './kanban-view.component.html',
@@ -10,6 +8,9 @@ export class KanbanViewComponent implements OnInit {
   addValue: string = "";
   selectedCard: string = "";
   stageId: number;
+  disableBack = true;
+  disableForward = true;
+  disableDelete = true;
   stages = [{
     id: 1,
     name: 'Backlog',
@@ -31,69 +32,73 @@ export class KanbanViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this
+
   }
 
   onAddCard() {
-    console.log(this.addValue);
-    this.stages[0].cards.push(this.addValue);
+    //console.log(this.addValue);
+
+    if (this.stages[0].cards.indexOf(this.addValue) >= 0) {
+      alert("card already exists");
+    }
+    else {
+      this.stages[0].cards.push(this.addValue);
+    }
+
   }
 
   onCardselect(data) {
-    console.log("view oncardselect " + data);
+    //console.log("view oncardselect " + data);
     this.selectedCard = data;
     this.stageId = this.stages.findIndex((stage) => stage.cards.indexOf(this.selectedCard) >= 0);
+    if (this.selectedCard == "") {
+      this.disableBack = true;
+      this.disableForward = true;
+      this.disableDelete = true;
+    }
+    else {
+      if (this.stageId == 0) {
+        this.disableBack = true;
+      }
+      else {
+        this.disableBack = false;
+      }
+      if (this.stageId == this.stages.length - 1) {
+        this.disableForward = true;
+      }
+      else {
+        this.disableForward = false;
+      }
+      this.disableDelete = false;
+    }
+
     console.log(this.stageId);
   }
 
   onMoveBackCard() {
-    if (this.selectedCard == "") {
-      return;
-
-    }
-    else {
-      if (this.stageId > 0) {
-        this.stages[this.stageId - 1].cards.push(this.selectedCard);
-      }
-      else {
-        this.stages[this.stages.length - 1].cards.push(this.selectedCard);
-      }
-
-      let index = this.stages[this.stageId].cards.indexOf(this.selectedCard);
-      this.stages[this.stageId].cards.splice(index, 1);
-      this.selectedCard = "";
-    }
+    let x = this.stages[this.stageId - 1].cards.push(this.selectedCard);
+    let index = this.stages[this.stageId].cards.indexOf(this.selectedCard);
+    this.stages[this.stageId].cards.splice(index, 1);
+    // this.selectedCard = "";
+    if (x != undefined) { this.onCardselect(this.stages[this.stageId - 1].cards[x - 1]); }
   }
 
   onMoveForwardCard() {
-    if (this.selectedCard == "") {
-      alert("Please Select Card!");
-    }
-    else {
+    let x = this.stages[this.stageId + 1].cards.push(this.selectedCard);
 
+    let index = this.stages[this.stageId].cards.indexOf(this.selectedCard);
+    this.stages[this.stageId].cards.splice(index, 1);
+    //this.selectedCard = "";
+    if (x != undefined) { this.onCardselect(this.stages[this.stageId + 1].cards[x - 1]); }
 
-      if (this.stageId < this.stages.length - 1) {
-        this.stages[this.stageId + 1].cards.push(this.selectedCard);
-      }
-      else {
-        this.stages[0].cards.push(this.selectedCard);
-      }
-
-      let index = this.stages[this.stageId].cards.indexOf(this.selectedCard);
-      this.stages[this.stageId].cards.splice(index, 1);
-      this.selectedCard = "";
-    }
   }
 
   onDeleteCard() {
-    if (this.selectedCard == "") {
-      alert("Please Select Card!");
-    }
-    else {
-      let index = this.stages[this.stageId].cards.indexOf(this.selectedCard);
-      this.stages[this.stageId].cards.splice(index, 1);
-      this.selectedCard = "";
-    }
+    let index = this.stages[this.stageId].cards.indexOf(this.selectedCard);
+    this.stages[this.stageId].cards.splice(index, 1);
+    this.onCardselect("");
+    this.disableDelete = true;
+
   }
 
 }

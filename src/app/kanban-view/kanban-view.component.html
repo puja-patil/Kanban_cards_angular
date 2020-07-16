@@ -18,15 +18,31 @@
         <input type="text" value="{{ selectedCard }}" readonly />
       </div>
       <div class="col-2">
-        <button type="submit" (click)="onMoveBackCard()">Move Back</button>
+        <button
+          type="submit"
+          (click)="onMoveBackCard()"
+          [disabled]="disableBack"
+        >
+          Move Back
+        </button>
       </div>
       <div class="col-2">
-        <button type="submit" (click)="onMoveForwardCard()">
+        <button
+          type="submit"
+          (click)="onMoveForwardCard()"
+          [disabled]="disableForward"
+        >
           Move Forward
         </button>
       </div>
       <div class="col-2">
-        <button type="submit" (click)="onDeleteCard()">Delete</button>
+        <button
+          type="submit"
+          (click)="onDeleteCard()"
+          [disabled]="disableDelete"
+        >
+          Delete
+        </button>
       </div>
     </div>
   </div>
